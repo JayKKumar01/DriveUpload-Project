@@ -34,7 +34,7 @@ public class DriveUploadWithProgress {
 
             // Enable Direct Upload (faster for large files)
             uploader.setDirectUploadEnabled(false);
-            uploader.setChunkSize(256*1024); // Minimum is 256KB
+            uploader.setChunkSize(2*1024*1024); // Minimum is 256KB
 
 
             // Add progress listener
@@ -43,6 +43,7 @@ public class DriveUploadWithProgress {
                 public void progressChanged(MediaHttpUploader uploader) throws IOException {
                     switch (uploader.getUploadState()) {
                         case INITIATION_STARTED:
+                            StorageChecker.checkStorageUsage(driveService);
                             System.out.println("Upload Initiation Started...");
                             break;
                         case INITIATION_COMPLETE:
@@ -53,6 +54,7 @@ public class DriveUploadWithProgress {
                             break;
                         case MEDIA_COMPLETE:
                             System.out.println("Upload Completed Successfully!");
+                            StorageChecker.checkStorageUsage(driveService);
                             break;
                         case NOT_STARTED:
                             System.out.println("Upload Not Started.");
